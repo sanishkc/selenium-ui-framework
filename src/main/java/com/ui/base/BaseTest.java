@@ -4,6 +4,7 @@ import java.util.Properties;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
@@ -21,6 +22,10 @@ import io.github.bonigarcia.wdm.WebDriverManager;
  * - Cleanly close browser after each test execution
  * 
  * This class promotes code reuse and consistent test setup across the framework.
+ * 
+ * Enhancement:
+ * - Runs normal Chrome locally
+ * - Runs headless Chrome in CI/CD environments automatically
  */
 public class BaseTest {
 
@@ -43,14 +48,30 @@ public class BaseTest {
         // Read browser name from configuration
         String browserName = prop.getProperty("browser");
 
-        // Launch browser based on config value
         if (browserName.equalsIgnoreCase("chrome")) {
 
-            // Automatically downloads and sets up ChromeDriver binary
+            // Automatically download and setup ChromeDriver
             WebDriverManager.chromedriver().setup();
 
-            // Create Chrome browser instance
-            driver = new ChromeDriver();
+            // Chrome options object to configure browser
+            ChromeOptions options = new ChromeOptions();
+
+            // Check if running in CI environment
+            // GitHub Actions sets CI=true by default
+            String ciEnv = System.getenv("CI");
+            if (ciEnv != null && ciEnv.equalsIgnoreCase("true")) {
+                // Headless mode for CI/CD
+                options.addArguments("--headless=new"); // latest headless mode
+                options.addArguments("--no-sandbox");
+                options.addArguments("--disable-dev-shm-usage");
+                options.addArguments("--disable-gpu");
+                System.out.println("Running tests in HEADLESS mode for CI.");
+            } else {
+                System.out.println("Running tests in LOCAL Chrome browser.");
+            }
+
+            // Initialize ChromeDriver with options
+            driver = new ChromeDriver(options);
         }
 
         // Maximize the browser window
