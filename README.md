@@ -28,4 +28,4 @@ The project is designed to demonstrate industry-standard automation practices, s
 
 **GitHub:** https://github.com/sanishkc/PlaywrightLoginProject/
 
-**Purpose:** This project is created for learning, demonstration, and professional portfolio purposes, showcasing hands-on expertise in Playwright-based UI automation and modern QA engineering practices.
+**Purpose:** This project is created for learning, demonstration, and professional portfolio purposes, showcasing hands-on expertise in Selenium-based UI automation and modern QA engineering practices.
